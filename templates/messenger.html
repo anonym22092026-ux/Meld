@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f7f6">
+  <meta name="description" content="Schreibe direkt mit deinem Team. Einfach, persönlich und übersichtlich.">
+  <title>Meld — Nachrichten, die verbinden</title>
+  <script src="{{ url_for('static', filename='theme.js') }}"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='messenger.css') }}">
+  <script src="{{ url_for('static', filename='messenger.js') }}" defer></script>
+</head>
+<body>
+  <main id="messenger-app">
+    <section id="auth-view" class="auth-view" hidden>
+      <div class="auth-panel">
+        <a class="brand" href="/" aria-label="Meld Startseite"><span class="brand-mark">m</span><span>meld</span></a>
+        <p class="eyebrow">GUTE GESPRÄCHE BEGINNEN HIER</p>
+        <h1 id="auth-title">Schön, dass du da bist.</h1>
+        <p id="auth-subtitle" class="auth-description">Melde dich an und bleib mit den Menschen in deinem Team verbunden.</p>
+        <div class="auth-tabs" role="tablist" aria-label="Konto">
+          <button id="login-tab" class="auth-tab is-active" type="button" role="tab" aria-selected="true">Anmelden</button>
+          <button id="register-tab" class="auth-tab" type="button" role="tab" aria-selected="false">Konto erstellen</button>
+        </div>
+        <form id="auth-form">
+          <label for="username">Benutzername</label>
+          <input id="username" name="username" autocomplete="username" minlength="3" maxlength="32" required>
+          <label for="password">Passwort</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" minlength="12" maxlength="128" required>
+          <p id="password-hint" class="field-hint" hidden>Mindestens 12 Zeichen.</p>
+          <button id="auth-submit" class="primary-button" type="submit">Anmelden <span aria-hidden="true">→</span></button>
+          <p id="auth-error" class="form-error" role="alert" hidden></p>
+        </form>
+        <p class="auth-footnote">Deine Gespräche an einem gemeinsamen Ort.</p>
+      </div>
+      <div class="auth-art" aria-hidden="true">
+        <div class="art-orbit art-orbit-one"></div>
+        <div class="art-orbit art-orbit-two"></div>
+        <div class="art-message art-message-one"><span class="art-avatar art-avatar-a">L</span><span><b>Lisa</b><br>Bin gleich da! 👋</span></div>
+        <div class="art-message art-message-two"><span class="art-avatar art-avatar-b">T</span><span><b>Tom</b><br>Perfekt, bis gleich ✨</span></div>
+        <div class="art-caption">Nah dran,<br>auch wenn ihr nicht am selben Ort seid.</div>
+      </div>
+    </section>
+
+    <section id="chat-view" class="messenger" hidden>
+      <aside class="chat-sidebar">
+        <div class="sidebar-heading">
+          <a class="brand" href="/" aria-label="Meld"><span class="brand-mark">m</span><span>meld</span></a>
+          <div class="sidebar-heading-actions">
+            <button id="theme-toggle" class="new-chat-button theme-toggle" type="button" aria-label="Dunkelmodus aktivieren" title="Dunkelmodus aktivieren">☾</button>
+            <button id="new-chat" class="new-chat-button" type="button" aria-label="Neuen Chat starten" title="Neuen Chat starten">＋</button>
+          </div>
+        </div>
+        <div class="inbox-heading">
+          <div><p class="eyebrow">DEIN BEREICH</p><h1>Nachrichten</h1></div>
+          <span class="inbox-spark" aria-hidden="true">✳</span>
+        </div>
+        <label class="inbox-search">
+          <span aria-hidden="true">⌕</span>
+          <input id="conversation-search" type="search" placeholder="Chats durchsuchen" aria-label="Chats durchsuchen">
+          <kbd>⌘ K</kbd>
+        </label>
+        <div class="section-caption"><span>DEINE CHATS</span><span id="conversation-count">0</span></div>
+        <div id="conversation-list" class="conversation-list"></div>
+        <div id="inbox-empty" class="inbox-empty" hidden>
+          <div class="empty-icon">✳</div><strong>Noch keine Chats</strong>
+          <p>Starte ein Gespräch mit jemandem aus deinem Team.</p>
+          <button id="empty-new-chat" class="text-button" type="button">Neuen Chat starten <span aria-hidden="true">→</span></button>
+        </div>
+        <div class="sidebar-footer">
+          <div class="profile-row">
+            <span id="profile-avatar" class="avatar avatar-profile">?</span>
+            <span class="profile-info"><strong id="profile-name">Nutzer</strong><small>Mitglied</small></span>
+            <button id="logout" class="logout-button" type="button" title="Abmelden" aria-label="Abmelden">↗</button>
+          </div>
+          <a class="notes-link" href="/notes">Notizen öffnen <span aria-hidden="true">↗</span></a>
+        </div>
+      </aside>
+
+      <main class="chat-main">
+        <section id="welcome-panel" class="welcome-panel">
+          <div class="welcome-art"><span class="welcome-bubble bubble-left">Hi!</span><span class="welcome-bubble bubble-right">Hey 👋</span><span class="welcome-flower">✳</span></div>
+          <p class="eyebrow">DEIN PLATZ FÜR GUTE GESPRÄCHE</p>
+          <h2>Einfach mal<br>Hallo sagen<span>.</span></h2>
+          <p>Wähle einen Chat aus oder starte ein neues Gespräch mit deinem Team.</p>
+          <button id="welcome-new-chat" class="primary-button welcome-button" type="button">Neuen Chat starten <span aria-hidden="true">→</span></button>
+        </section>
+        <section id="conversation-panel" class="conversation-panel" hidden>
+          <header class="chat-header">
+            <button id="back-to-inbox" class="back-button" type="button" aria-label="Zurück zu den Chats">←</button>
+            <span id="chat-avatar" class="avatar chat-avatar">?</span>
+            <div class="chat-contact"><strong id="chat-contact-name">Kontakt</strong><span><i></i> Direktnachricht</span></div>
+            <span class="header-lock" title="Nachrichten werden auf dem Server gespeichert und nicht Ende-zu-Ende-verschlüsselt">Direktchat</span>
+          </header>
+          <div id="message-list" class="message-list" aria-live="polite" aria-label="Nachrichten"></div>
+          <form id="message-form" class="composer">
+            <label class="composer-box" for="message-input">
+              <textarea id="message-input" rows="1" maxlength="4000" placeholder="Schreib eine Nachricht..." aria-label="Nachricht" required></textarea>
+              <span class="composer-hint">Enter zum Senden · Shift + Enter für neue Zeile</span>
+            </label>
+            <button id="send-message" class="send-button" type="submit" aria-label="Nachricht senden" title="Nachricht senden">↑</button>
+          </form>
+        </section>
+      </main>
+    </section>
+  </main>
+
+  <dialog id="contacts-dialog" class="contacts-dialog">
+    <div class="dialog-heading">
+      <div><p class="eyebrow">MENSCHEN AUS DEINEM TEAM</p><h2>Neuer Chat</h2></div>
+      <button id="close-contacts" class="close-button" type="button" aria-label="Schließen">×</button>
+    </div>
+    <label class="contact-search"><span aria-hidden="true">⌕</span><input id="contact-search-input" type="search" placeholder="Nach Namen suchen..." aria-label="Kontakte durchsuchen"></label>
+    <div id="contact-list" class="contact-list"></div>
+    <p id="contact-empty" class="contact-empty" hidden>Keine Kontakte gefunden.</p>
+    <p id="contact-error" class="form-error" role="alert" hidden></p>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

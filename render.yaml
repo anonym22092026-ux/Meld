@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: notizraum
+    runtime: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: python serve.py
+    healthCheckPath: /healthz
+    disk:
+      name: notizraum-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: DATABASE_PATH
+        value: /var/data/notes.sqlite3
+      - key: MEDIA_DIR
+        value: /var/data/uploads
+      - key: SECRET_KEY
+        generateValue: true
+      - key: SESSION_COOKIE_SECURE
+        value: "true"

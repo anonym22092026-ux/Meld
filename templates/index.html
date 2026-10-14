@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f6f2">
+  <title>Notizen — gemeinsam festhalten</title>
+  <script src="{{ url_for('static', filename='theme.js') }}"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main id="app" class="app-shell">
+    <section id="auth-view" class="auth-view" hidden>
+      <div class="auth-card">
+        <a class="brand" href="/" aria-label="Notizraum Startseite">
+          <span class="brand-mark" aria-hidden="true">n.</span>
+          <span>notizraum</span>
+        </a>
+        <p class="eyebrow">GEMEINSAM GEDACHT</p>
+        <h1 id="auth-title">Schön, dass du da bist.</h1>
+        <p id="auth-subtitle" class="muted">Melde dich an und halte Ideen an einem Ort fest.</p>
+        <div class="auth-tabs" role="tablist" aria-label="Anmeldung">
+          <button id="login-tab" class="auth-tab is-active" type="button" role="tab">Anmelden</button>
+          <button id="register-tab" class="auth-tab" type="button" role="tab">Konto erstellen</button>
+        </div>
+        <form id="auth-form">
+          <label for="username">Benutzername</label>
+          <input id="username" name="username" autocomplete="username" minlength="3" maxlength="32" required>
+          <label for="password">Passwort</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" minlength="12" maxlength="128" required>
+          <p id="password-hint" class="field-hint" hidden>Mindestens 12 Zeichen.</p>
+          <button id="auth-submit" class="button button-primary button-wide" type="submit">Anmelden <span aria-hidden="true">→</span></button>
+          <p id="auth-error" class="form-error" role="alert" hidden></p>
+        </form>
+        <p class="auth-note">Dein Team. Ein gemeinsamer Ort für alles, was wichtig ist.</p>
+      </div>
+      <div class="auth-decoration" aria-hidden="true">
+        <div class="decor-card decor-card-one"><span class="decor-dot"></span><span></span><span></span></div>
+        <div class="decor-card decor-card-two"><span class="decor-spark">✳</span><span></span><span></span></div>
+        <div class="decor-label">Gedanken werden besser,<br> wenn man sie teilt.</div>
+      </div>
+    </section>
+
+    <section id="workspace-view" class="workspace" hidden>
+      <aside class="sidebar">
+        <div class="sidebar-top">
+          <a class="brand" href="/notes" aria-label="Notizraum">
+            <span class="brand-mark" aria-hidden="true">n.</span>
+            <span>notizraum</span>
+          </a>
+          <div class="sidebar-tools">
+            <button id="theme-toggle" class="icon-button theme-toggle" type="button" aria-label="Dunkelmodus aktivieren" title="Dunkelmodus aktivieren">☾</button>
+            <button id="collapse-sidebar" class="icon-button collapse-button" type="button" aria-label="Seitenleiste einklappen" title="Menü einklappen">«</button>
+          </div>
+        </div>
+        <button id="new-note" class="button button-new" type="button"><span class="plus-icon">＋</span> Neue Notiz <kbd>N</kbd></button>
+        <div class="side-label">DEIN ARBEITSBEREICH</div>
+        <button id="all-notes" class="nav-item is-selected" type="button">
+          <span class="nav-icon">▤</span><span class="nav-text">Alle Notizen</span><span id="note-count" class="count-badge">0</span>
+        </button>
+        <a class="nav-item app-nav-link" href="/">
+          <span class="nav-icon">◉</span><span class="nav-text">Nachrichten</span>
+        </a>
+        <div class="sidebar-bottom">
+          <div class="team-card">
+            <span class="team-icon">✳</span>
+            <div><strong>Gemeinsam besser</strong><p>Notizen für dein Team</p></div>
+          </div>
+          <button id="user-menu" class="user-menu" type="button" aria-expanded="false">
+            <span id="user-avatar" class="avatar">?</span>
+            <span class="user-info"><strong id="current-username">Nutzer</strong><small id="current-role">Mitglied</small></span>
+            <span class="menu-caret">⌄</span>
+          </button>
+          <div id="user-dropdown" class="user-dropdown" hidden>
+            <button id="admin-link" class="dropdown-item" type="button" hidden>Benutzer verwalten</button>
+            <button id="logout" class="dropdown-item" type="button">Abmelden</button>
+          </div>
+        </div>
+      </aside>
+
+      <section class="main-panel">
+        <header class="topbar">
+          <div class="breadcrumbs"><span>Arbeitsbereich</span><span class="crumb-divider">/</span><strong>Alle Notizen</strong></div>
+          <div class="top-actions">
+            <label class="search-box">
+              <span aria-hidden="true">⌕</span>
+              <input id="search" type="search" placeholder="Notizen durchsuchen..." aria-label="Notizen durchsuchen">
+              <kbd>⌘ K</kbd>
+            </label>
+            <button id="top-new-note" class="button button-primary top-create" type="button">＋ <span>Neue Notiz</span></button>
+          </div>
+        </header>
+        <div class="content-area">
+          <div class="page-heading">
+            <div>
+              <p class="eyebrow">DEIN TEAM-WORKSPACE</p>
+              <h1>Alle Notizen<span class="heading-period">.</span></h1>
+              <p class="muted">Ein guter Gedanke ist noch besser, wenn man ihn teilt.</p>
+            </div>
+            <div class="collaborators" title="Gemeinsamer Arbeitsbereich">
+              <span class="collab-avatar collab-one">✳</span>
+              <span class="collab-avatar collab-two">✦</span>
+              <span class="collab-avatar collab-three">●</span>
+              <span class="collab-caption">Gemeinsamer Bereich</span>
+            </div>
+          </div>
+          <div class="list-toolbar">
+            <div class="view-tabs" role="group" aria-label="Notizen filtern">
+              <button class="view-tab is-active" type="button" data-filter="all" aria-pressed="true">Alle</button>
+              <button class="view-tab" type="button" data-filter="public" aria-pressed="false">Öffentlich</button>
+              <button class="view-tab" type="button" data-filter="private" aria-pressed="false">Privat</button>
+            </div>
+            <span id="results-label" class="results-label">0 Notizen</span>
+          </div>
+          <div id="notes-grid" class="notes-grid"></div>
+          <div id="empty-state" class="empty-state" hidden>
+            <div class="empty-illustration"><span>✳</span><span>✎</span></div>
+            <h2 id="empty-title">Der Anfang ist eine leere Seite.</h2>
+            <p id="empty-description">Halte einen Gedanken fest und lade dein Team zum Mitdenken ein.</p>
+            <button class="button button-primary" type="button" data-action="new">Deine erste Notiz erstellen <span aria-hidden="true">→</span></button>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <dialog id="note-dialog" class="note-dialog">
+    <form id="note-form" method="dialog">
+      <div class="dialog-top">
+        <span id="dialog-label" class="eyebrow">NEUE NOTIZ</span>
+        <button id="close-dialog" class="icon-button" type="button" aria-label="Schließen">×</button>
+      </div>
+      <input id="note-title" class="note-title-input" maxlength="160" placeholder="Gib deiner Notiz einen Titel..." aria-label="Titel" required>
+      <div class="editor-toolbar" role="toolbar" aria-label="Text formatieren">
+        <button class="editor-tool" type="button" data-command="bold" aria-label="Fett" title="Fett"><strong>B</strong></button>
+        <button class="editor-tool" type="button" data-command="italic" aria-label="Kursiv" title="Kursiv"><em>I</em></button>
+        <button class="editor-tool" type="button" data-command="insertUnorderedList" aria-label="Liste" title="Liste">☷</button>
+        <span class="toolbar-divider" aria-hidden="true"></span>
+        <button id="insert-table" class="editor-tool editor-tool-label" type="button" title="Tabelle einfügen">▦ Tabelle</button>
+        <button id="add-media" class="editor-tool editor-tool-label" type="button" title="Bild oder Video hinzufügen">＋ Bild / Video</button>
+        <input id="media-files" type="file" accept="image/jpeg,image/png,image/gif,image/webp,video/mp4,video/webm" multiple hidden>
+      </div>
+      <div id="note-content" class="note-content-input" contenteditable="true" role="textbox" aria-label="Notizinhalt" aria-multiline="true" data-placeholder="Schreibe hier deine Notiz..."></div>
+      <p class="editor-hint">Tabellen erstellen, Text formatieren sowie Bilder (max. 15 MB) und Videos (max. 50 MB) hinzufügen.</p>
+      <div id="note-media-list" class="note-media-list" aria-live="polite"></div>
+      <label class="visibility-field" for="note-visibility">
+        <span>Sichtbarkeit</span>
+        <select id="note-visibility">
+          <option value="public">Öffentlich · Für alle sichtbar</option>
+          <option value="private">Privat · Nur für dich sichtbar</option>
+        </select>
+      </label>
+      <p id="visibility-help" class="visibility-help">Öffentliche Notizen können alle angemeldeten Mitglieder sehen.</p>
+      <div class="dialog-footer">
+        <span id="note-author" class="note-author"></span>
+        <div class="dialog-buttons">
+          <button id="delete-note" class="button button-danger button-quiet" type="button" hidden>Löschen</button>
+          <button id="cancel-note" class="button button-quiet" type="button">Abbrechen</button>
+          <button class="button button-primary" type="submit">Speichern</button>
+        </div>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="users-dialog" class="users-dialog">
+    <div class="dialog-top">
+      <div><p class="eyebrow">TEAM-VERWALTUNG</p><h2>Benutzer</h2></div>
+      <button id="close-users" class="icon-button" type="button" aria-label="Schließen">×</button>
+    </div>
+    <p class="muted users-intro">Verwalte Rollen für gemeinsame Notizen und Konten.</p>
+    <div id="users-list" class="users-list"></div>
+    <p class="users-footnote">Neue Mitglieder können über „Konto erstellen“ auf der Anmeldeseite beitreten.</p>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</body>
+</html>
