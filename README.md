@@ -1,5 +1,6 @@
 # Meld
 
+!!!Wichtig!!! Jeder muss das Pogram für seinen PC anpassen lassen da es mimmer nur im eigenen Netzwerk Läuft.
 Meld verbindet Direktnachrichten und den bisherigen Notizraum in einer Website mit gemeinsamen Benutzerkonten. In der Seitenleiste kannst du zwischen **Nachrichten** und **Notizen** wechseln. Beide Bereiche verwenden dieselbe Anmeldung und dieselbe gespeicherte Hell-/Dunkelmodus-Auswahl.
 
 Nach der Anmeldung kannst du über **Neuen Chat starten** andere registrierte Konten finden und direkt anschreiben. Nachrichten werden alle vier Sekunden aktualisiert und dauerhaft in der SQLite-Datenbank gespeichert. Die Chatoberfläche passt sich an Hoch- und Querformat an. Die Chats sind nicht Ende-zu-Ende-verschlüsselt: Betreibende des Servers können auf gespeicherte Nachrichten zugreifen. Verwende den Messenger daher nicht für vertrauliche Inhalte.
